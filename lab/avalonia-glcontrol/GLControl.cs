@@ -41,8 +41,8 @@ namespace example_avalonia_opengl
             };
 
             win = new GameWindow(gameWindowSettings, nativeWindowSettings);
-            win.IsVisible = false;
-            win.MakeCurrent();
+            //win.IsVisible = false;
+            win.MakeCurrent();            
 
             this.Init();
         }
@@ -51,6 +51,7 @@ namespace example_avalonia_opengl
         {
             System.Console.WriteLine($"MeasureOverride size:{availableSize}");
             win.Size = new OpenToolkit.Mathematics.Vector2i((int)availableSize.Width, (int)availableSize.Height);
+            GL.Viewport(0, 0, win.Size.X, win.Size.Y);
             System.Console.WriteLine($"win.Size:{win.Size}");
 
             return availableSize;
@@ -58,6 +59,7 @@ namespace example_avalonia_opengl
 
         public override void Render(Avalonia.Media.DrawingContext context)
         {
+            System.Console.WriteLine("---> RENDER");
             this.GetFrame(win.Size);
             GL.Flush();
             win.SwapBuffers();
@@ -70,7 +72,7 @@ namespace example_avalonia_opengl
             using (var l = bitmap.Lock())
             {
                 GL.PixelStore(PixelStoreParameter.PackRowLength, l.RowBytes / 4);
-                GL.ReadPixels(0, 0, win.Size.X, win.Size.Y, PixelFormat.Rgba, PixelType.UnsignedByte, l.Address);
+                GL.ReadPixels(0, 0, win.Size.X, win.Size.Y, PixelFormat.Bgra, PixelType.UnsignedByte, l.Address);                
             }
 
             context.DrawImage(bitmap, 1.0,

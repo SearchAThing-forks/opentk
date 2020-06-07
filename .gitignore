@@ -833,3 +833,4 @@ auto/*
 src/OpenGL/*.*/
 gl.xml
 src/OpenGL/Extensions
+src/OpenGL/DummyTypes.cs

@@ -85,13 +85,13 @@ namespace example_avalonia_opengl
 
         protected override void GetFrame(OpenToolkit.Mathematics.Vector2i winSize)
         {
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadIdentity();
-            GL.Ortho(0, winSize.X, winSize.Y, 0, 0, 1);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
+            // GL.MatrixMode(MatrixMode.Projection);
+            // GL.LoadIdentity();
+            // GL.Ortho(0, winSize.X, winSize.Y, 0, 0, 1);
+            // GL.MatrixMode(MatrixMode.Modelview);
+            // GL.LoadIdentity();
 
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.AccumBufferBit);
+            GL.Clear(ClearBufferMask.ColorBufferBit);// | ClearBufferMask.AccumBufferBit);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferObject);
             GL.BindVertexArray(VertexArrayObject);

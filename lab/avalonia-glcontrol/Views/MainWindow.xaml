@@ -3,7 +3,7 @@
         xmlns:vm="clr-namespace:example_avalonia_opengl.ViewModels;assembly=example_avalonia_opengl"
         xmlns:local="clr-namespace:example_avalonia_opengl"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="example_avalonia_opengl.Views.MainWindow"    
         Icon="/Assets/avalonia-logo.ico"
@@ -15,7 +15,7 @@
 
     <Grid ColumnDefinitions="1*,9*" RowDefinitions="1*">
         <Button Grid.Row="0" Grid.Column="0" Content="test" Click="click1"/>
-        <local:GLControlTest Grid.Row="0" Grid.Column="1"/>        
+        <local:GLControlTest Grid.Row="0" Grid.Column="1" x:Name="glctl" />                
     </Grid>
 
 </Window>

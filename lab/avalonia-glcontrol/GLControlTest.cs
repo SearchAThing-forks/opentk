@@ -46,57 +46,58 @@ namespace example_avalonia_opengl
         int VertexBufferObject;
         int VertexArrayObject;
 
-        protected override void Init()
-        {
-            System.Console.WriteLine("===== INIT"); ;
-            VertexShader = GL.CreateShader(ShaderType.VertexShader);
-            GL.ShaderSource(VertexShader, VertexShaderSource);
-            GL.CompileShader(VertexShader);
-
-            FragmentShader = GL.CreateShader(ShaderType.FragmentShader);
-            GL.ShaderSource(FragmentShader, FragmentShaderSource);
-            GL.CompileShader(FragmentShader);
-
-            ShaderProgram = GL.CreateProgram();
-            GL.AttachShader(ShaderProgram, VertexShader);
-            GL.AttachShader(ShaderProgram, FragmentShader);
-            GL.LinkProgram(ShaderProgram);
-
-            VertexBufferObject = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferObject);
-            GL.BufferData(BufferTarget.ArrayBuffer, Points.Length * sizeof(float), Points, BufferUsageHint.StaticDraw);
-
-            var positionLocation = GL.GetAttribLocation(ShaderProgram, "position");
-            VertexArrayObject = GL.GenVertexArray();
-            GL.BindVertexArray(VertexArrayObject);
-            GL.VertexAttribPointer(positionLocation, 4, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(positionLocation);
-
-            DebugProc cback = (src, type, id, severity, length, message, userParam) =>
-            { 
-                var msg = Marshal.PtrToStringAuto(message);               
-                System.Console.WriteLine($"GL ERROR:" + msg);
-            };
-            GL.Enable(EnableCap.DebugOutput);
-            GL.DebugMessageCallback(cback, (IntPtr)null);
-        }
-
         static int cnt = 0;
+
+        bool shader_initialized = false;
 
         protected override void GetFrame(OpenToolkit.Mathematics.Vector2i winSize)
         {
-            // GL.MatrixMode(MatrixMode.Projection);
-            // GL.LoadIdentity();
-            // GL.Ortho(0, winSize.X, winSize.Y, 0, 0, 1);
-            // GL.MatrixMode(MatrixMode.Modelview);
-            // GL.LoadIdentity();
+            if (!shader_initialized)
+            {
+                System.Console.WriteLine("===== INIT"); ;
+                VertexShader = GL.CreateShader(ShaderType.VertexShader);
+                GL.ShaderSource(VertexShader, VertexShaderSource);
+                GL.CompileShader(VertexShader);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit);// | ClearBufferMask.AccumBufferBit);
+                FragmentShader = GL.CreateShader(ShaderType.FragmentShader);
+                GL.ShaderSource(FragmentShader, FragmentShaderSource);
+                GL.CompileShader(FragmentShader);
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferObject);
-            GL.BindVertexArray(VertexArrayObject);
+                ShaderProgram = GL.CreateProgram();
+                GL.AttachShader(ShaderProgram, VertexShader);
+                GL.AttachShader(ShaderProgram, FragmentShader);
+                GL.LinkProgram(ShaderProgram);
+
+                VertexBufferObject = GL.GenBuffer();
+                GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferObject);
+                GL.BufferData(BufferTarget.ArrayBuffer, Points.Length * sizeof(float), Points, BufferUsageHint.StaticDraw);
+
+                var positionLocation = GL.GetAttribLocation(ShaderProgram, "position");
+                VertexArrayObject = GL.GenVertexArray();
+                GL.BindVertexArray(VertexArrayObject);
+                GL.VertexAttribPointer(positionLocation, 4, VertexAttribPointerType.Float, false, 0, 0);
+                GL.EnableVertexAttribArray(positionLocation);
+
+                DebugProc cback = (src, type, id, severity, length, message, userParam) =>
+                {
+                    var msg = Marshal.PtrToStringAuto(message);
+                    System.Console.WriteLine($"GL ERROR:" + msg);
+                };
+                GL.Enable(EnableCap.DebugOutput);
+                GL.DebugMessageCallback(cback, (IntPtr)null);
+
+                GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferObject);
+                GL.BindVertexArray(VertexArrayObject);
+                GL.UseProgram(ShaderProgram);
+
+                shader_initialized = true;
+            }
+            GL.ClearColor(Color.LightYellow);
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+
+            System.Console.WriteLine($"***GetFrame");
+
             var colorLocation = GL.GetUniformLocation(ShaderProgram, "inColor");
-            GL.UseProgram(ShaderProgram);
 
             GL.Uniform4(colorLocation, cnt % 2 == 0 ? Color.Blue : Color.Red);
             ++cnt;

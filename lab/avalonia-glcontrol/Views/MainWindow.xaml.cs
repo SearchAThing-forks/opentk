@@ -23,7 +23,13 @@ namespace example_avalonia_opengl.Views
 
         private void click1(object sender, RoutedEventArgs e)
         {
-            System.Console.WriteLine($"{DateTime.Now}: click");
+            System.Console.WriteLine($"{DateTime.Now}: click");            
+
+            var ctl = this.FindControl<GLControl>("glctl");
+            
+            ctl.win.MakeCurrent();
+            
+            ctl.InvalidateVisual();            
         }
     }
 }
